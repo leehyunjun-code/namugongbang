@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공방 사람들 협동조합</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #faf8f5;
+            color: #3a3a3a;
+            word-break: keep-all;
+            word-wrap: break-word;
+        }
+        
+        .wrap {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* 헤더 부분 */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-top: 30px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            color: #6b5344;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+        
+        .header span {
+            color: #9b8579;
+            font-size: 14px;
+        }
+        
+        /* 컨텐츠 영역 */
+        .content {
+            background: white;
+            padding: 45px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            line-height: 1.9;
+        }
+        
+        .intro {
+            font-size: 19px;
+            color: #5a4a42;
+            margin-bottom: 35px;
+            font-weight: 500;
+            word-break: keep-all;
+            animation: slideDown 0.8s ease;
+        }
+        
+        p {
+            margin-bottom: 22px;
+            font-size: 16px;
+            color: #555;
+            word-break: keep-all;
+        }
+        
+        /* 강조 텍스트 */
+        strong {
+            color: #6b5344;
+            font-weight: 600;
+        }
+        
+        .highlight-text {
+            background-color: #fff9f0;
+            padding: 2px 4px;
+            border-bottom: 2px solid #d4b5a0;
+        }
+        
+        /* 이미지 영역 */
+        .img-area {
+            margin: 35px 0;
+            text-align: center;
+        }
+        
+        .img-box {
+            width: 100%;
+            max-width: 650px;
+            height: 380px;
+            background-color: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            color: #999;
+        }
+        
+        /* 마지막 문구 */
+        .ending {
+            margin-top: 60px;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .ending-text {
+            font-size: 25px !important;
+            color: #6b5344;
+            letter-spacing: 0.05em;
+            line-height: 1.8;
+            font-style: italic;
+            word-break: keep-all;
+            font-weight: 500;
+        }
+        
+        /* 스크롤 애니메이션 */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-up.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 모바일 */
+        @media (max-width: 640px) {
+            .wrap {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .intro {
+                font-size: 17px;
+            }
+            
+            p {
+                font-size: 15px;
+            }
+            
+            .img-box {
+                height: 250px;
+            }
+            
+            .ending-text {
+                font-size: 24px !important;
+            }
+        }
+        
+        /* 링크 스타일 */
+        a {
+            color: #7a6155;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="header">
+            <h1>공방 사람들 협동조합</h1>
+            <span>Wood, People, and Stories</span>
+        </div>
+        
+        <div class="content">
+            <div class="intro">
+                나무와 사람, 그리고 이야기.
+            </div>
+            
+            <p class="fade-up">
+                우리는 각자의 작은 공방에서 시작했습니다. 누군가는 횡성에서, 누군가는 양평·수원·김포에서 나무를 만지며, 손끝으로 온기를 담아 세상에 내놓았습니다.
+            </p>
+            
+            <p class="fade-up">
+                하지만 더 많은 사람들과 함께 배우고, 만들고, 나누고 싶었습니다.<br>
+                그래서 우리는 모였습니다. <strong class="highlight-text">"공방 사람들 협동조합"</strong>.
+            </p>
+            
+            <div class="img-area">
+                <div class="img-box">
+                    <img src="class.jpg" alt="목공 수업 현장" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+            </div>
+            
+            <p class="fade-up">
+                이곳은 단순히 나무를 깎고 가구를 만드는 곳이 아닙니다.<br>
+                <strong>사람과 사람을 이어주고, 지역과 마음을 연결하며, 나무에 새로운 이야기를 심어가는 공동체</strong>입니다.
+            </p>
+            
+            <p class="fade-up">
+                작은 손길이 모여 큰 숲을 이루듯, 우리의 공방도 함께 모여 더 큰 꿈을 꿉니다. 앞으로 사회적기업으로 성장하며, <strong>지속 가능한 나눔과 창작의 길</strong>을 함께 걸어가겠습니다.
+            </p>
+            
+            <div class="ending fade-up">
+                <span class="ending-text">
+                    나무와 사람, 그 사이의 따뜻한 이야기에 여러분을 초대합니다.
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 스크롤 애니메이션
+        function scrollAnimation() {
+            const elements = document.querySelectorAll('.fade-up');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementBottom = element.getBoundingClientRect().bottom;
+                
+                // 화면에 들어오면 나타나고, 화면 밖으로 나가면 다시 숨김
+                if (elementTop < window.innerHeight - 100 && elementBottom > 0) {
+                    element.classList.add('show');
+                } else {
+                    element.classList.remove('show');
+                }
+            });
+        }
+        
+        // 페이지 로드 시 실행
+        window.addEventListener('load', scrollAnimation);
+        // 스크롤 시 실행
+        window.addEventListener('scroll', scrollAnimation);
+        
+        // 이미지와 마지막 문구도 애니메이션 추가
+        document.querySelector('.img-area').classList.add('fade-up');
+        document.querySelector('.ending').classList.add('fade-up');
+    </script>
+</body>
+</html>
