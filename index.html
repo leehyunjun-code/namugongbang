@@ -23,7 +23,7 @@
         
         /* 네비게이션바 스타일 */
         .navbar {
-            width: 250px;
+            width: 170px;
             background-color: #2c2c2c;
             color: white;
             position: fixed;
@@ -124,7 +124,7 @@
         
         /* 메인 컨텐츠 조정 */
         .main-wrapper {
-            margin-left: 250px;
+            margin-left: 170px;
             min-height: 100vh;
             transition: margin-left 0.3s ease;
         }
@@ -225,10 +225,11 @@
             max-width: 650px;
             height: 480px;
             margin: 0 auto;
-            border-radius: 4px;
+            border-radius: 8px;
             overflow: hidden;
             background-color: #000;
             position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         .video-box video {
@@ -493,9 +494,28 @@
             }
         }
         
-        /* 모바일 반응형 */
+        /* 태블릿 반응형 (768px ~ 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .navbar {
+                width: 170px;
+            }
+            
+            .main-wrapper {
+                margin-left: 170px;
+            }
+            
+            .content {
+                padding: 35px;
+            }
+            
+            .video-box {
+                height: 400px;
+            }
+        }
+        
+        /* 모바일 반응형 (768px 이하) */
         @media (max-width: 768px) {
-            /* 모바일에서 네비게이션바 숨김 */
+            /* 네비게이션바 숨김 */
             .navbar {
                 transform: translateX(-100%);
             }
@@ -504,12 +524,12 @@
                 transform: translateX(0);
             }
             
-            /* 모바일에서 햄버거 메뉴 표시 */
+            /* 햄버거 메뉴 표시 */
             .mobile-menu-btn {
                 display: block;
             }
             
-            /* 모바일에서 메인 컨텐츠 전체 너비 */
+            /* 메인 컨텐츠 전체 너비 */
             .main-wrapper {
                 margin-left: 0;
             }
@@ -538,14 +558,18 @@
                 height: 250px;
             }
             
+            /* 모바일 비디오 박스 */
             .video-box {
-                height: 360px;
+                height: 280px;
+                margin-bottom: 20px;
             }
             
             .ending-text {
-                font-size: 22px;
+                font-size: 20px;
+                line-height: 1.6;
             }
             
+            /* 모바일 팝업 */
             .popup-wrapper {
                 width: 95%;
             }
@@ -562,14 +586,14 @@
             
             .popup-container:nth-child(2) {
                 z-index: 20;
-                left: -15px;
+                left: -10px;
                 transform: translateY(10px) scale(0.95);
                 opacity: 0.8;
             }
             
             .popup-container:nth-child(3) {
                 z-index: 10;
-                left: 15px;
+                left: 10px;
                 transform: translateY(20px) scale(0.9);
                 opacity: 0.6;
             }
@@ -592,6 +616,62 @@
             
             .popup-footer {
                 padding: 15px 25px;
+            }
+        }
+        
+        /* 작은 모바일 (480px 이하) */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 24px;
+            }
+            
+            .header span {
+                font-size: 13px;
+            }
+            
+            .intro {
+                font-size: 16px;
+                margin-bottom: 25px;
+            }
+            
+            .content {
+                padding: 25px 15px;
+            }
+            
+            .video-box {
+                height: 220px;
+            }
+            
+            .ending {
+                margin-top: 40px;
+                padding: 30px 15px;
+            }
+            
+            .ending-text {
+                font-size: 18px;
+            }
+            
+            .popup-title {
+                font-size: 18px;
+            }
+            
+            .popup-content {
+                font-size: 14px;
+            }
+        }
+        
+        /* 아주 작은 모바일 (360px 이하) */
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 22px;
+            }
+            
+            .video-box {
+                height: 200px;
+            }
+            
+            .ending-text {
+                font-size: 16px;
             }
         }
     </style>
@@ -708,7 +788,16 @@
         // 네비게이션바 토글
         function toggleNavbar() {
             const navbar = document.getElementById('navbar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
             navbar.classList.toggle('open');
+            
+            // 네비게이션바가 열려있으면 햄버거 메뉴 숨기기
+            if (navbar.classList.contains('open')) {
+                menuBtn.style.display = 'none';
+            } else {
+                menuBtn.style.display = 'block';
+            }
         }
         
         // 스크롤 애니메이션
@@ -728,6 +817,17 @@
         
         // 스크롤 이벤트 리스너
         window.addEventListener('scroll', scrollAnimation);
+        
+        // 메인 콘텐츠 클릭시 네비게이션바 닫기
+        document.querySelector('.main-wrapper').addEventListener('click', function() {
+            const navbar = document.getElementById('navbar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (navbar.classList.contains('open')) {
+                navbar.classList.remove('open');
+                menuBtn.style.display = 'block';
+            }
+        });
         
         // 팝업 표시 (Supabase에서 가져오기)
         async function showPopups() {
@@ -906,4 +1006,4 @@
         });
     </script>
 </body>
-</html>#
+</html>
