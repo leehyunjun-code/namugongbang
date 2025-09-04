@@ -511,7 +511,7 @@
             
             <p class="fade-up">
                 이곳은 단순히 나무를 깎고 가구를 만드는 곳이 아닙니다.<br>
-                <strong>사람과 사람을 이어주고, 지역과 마음을 연결하며, 나무에 새로운 이야기를 심어가는 공동체</strong>입니다.
+                <strong>사람과 사람을 이어주고, 지역과 마음을 연결하며,나무에 새로운 이야기를 심어가는 공동체</strong>입니다.
             </p>
             
             <p class="fade-up">
@@ -534,6 +534,9 @@
     </div>
     
     <script>
+        // 서버 API URL
+        const API_BASE = '';
+        
         // 스크롤 애니메이션
         function scrollAnimation() {
             const elements = document.querySelectorAll('.fade-up');
@@ -557,8 +560,8 @@
         
         window.addEventListener('scroll', scrollAnimation);
         
-        // 팝업 표시
-        function showPopups() {
+        // 팝업 표시 (서버에서 가져오기)
+        async function showPopups() {
             // 오늘 하루 안보기 체크
             const todayClosed = localStorage.getItem('popupClosedDate');
             const today = new Date().toDateString();
@@ -567,7 +570,40 @@
                 return;
             }
             
-            // 팝업 목록 가져오기
+            try {
+                // 서버에서 활성 팝업 가져오기
+                const response = await fetch(`${API_BASE}/api/popups/active`);
+                if (!response.ok) {
+                    throw new Error('서버에서 팝업 데이터를 가져올 수 없습니다.');
+                }
+                
+                const activePopups = await response.json();
+                
+                if (activePopups.length === 0) {
+                    return;
+                }
+                
+                // 팝업 생성 (최대 3개)
+                const wrapper = document.getElementById('popupWrapper');
+                wrapper.innerHTML = '';
+                
+                activePopups.slice(0, 3).forEach((popup, index) => {
+                    const container = createPopupElement(popup, index);
+                    wrapper.appendChild(container);
+                });
+                
+                document.getElementById('popupOverlay').classList.add('active');
+                
+            } catch (error) {
+                console.error('서버 팝업 로드 실패:', error);
+                
+                // 서버 연결 실패시 localStorage 백업 사용
+                showPopupsFromLocalStorage();
+            }
+        }
+        
+        // localStorage 백업 사용 (서버 연결 실패시)
+        function showPopupsFromLocalStorage() {
             const popupsList = localStorage.getItem('popupsList');
             if (!popupsList) {
                 // 구버전 호환
