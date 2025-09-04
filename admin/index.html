@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>팝업 관리 - 공방 사람들</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -573,11 +574,18 @@
     </div>
     
     <script>
+        // Supabase 설정
+        if (typeof window.SUPABASE_URL === 'undefined') {
+            window.SUPABASE_URL = 'https://qwikdismsngrfyukoihd.supabase.co';
+        }
+        if (typeof window.SUPABASE_ANON_KEY === 'undefined') {
+            window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aWtkaXNtc25ncmZ5dWtvaWhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE3MDE1NjcsImV4cCI6MjA2NzI3NzU2N30.arcdnlPp9W7-wg0HgWVRAqvSmlm34_Th-0ef5oLfU8o';
+        }
+        
+        const supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+        
         let popups = [];
         let editingIndex = null;
-        
-        // 서버 API URL
-        const API_BASE = '';  // 같은 도메인에서 실행되므로 빈 문자열
         
         // 페이지 로드 시 팝업 목록 불러오기
         window.onload = function() {
@@ -630,27 +638,24 @@
             }
         }
         
-        // 팝업 목록 불러오기 (서버에서)
+        // 팝업 목록 불러오기 (Supabase에서)
         async function loadPopups() {
             try {
-                const response = await fetch(`${API_BASE}/api/popups`);
-                if (!response.ok) {
-                    throw new Error('서버에서 데이터를 가져올 수 없습니다.');
+                const { data, error } = await supabase
+                    .from('popups')
+                    .select('*')
+                    .order('saved_at', { ascending: false });
+                
+                if (error) {
+                    throw error;
                 }
-                popups = await response.json();
+                
+                popups = data || [];
                 renderPopupList();
+                
             } catch (error) {
                 console.error('팝업 목록 불러오기 오류:', error);
-                
-                // 서버 연결 실패시 localStorage 백업 사용
-                const savedPopups = localStorage.getItem('popupsList');
-                if (savedPopups) {
-                    popups = JSON.parse(savedPopups);
-                    renderPopupList();
-                    alert('서버 연결에 실패했습니다. 로컬 데이터를 사용합니다.');
-                } else {
-                    alert('서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.');
-                }
+                alert('팝업 목록을 불러오는데 실패했습니다.');
             }
         }
         
@@ -697,8 +702,8 @@
                             }
                         </td>
                         <td>${popup.title || '제목 없음'}</td>
-                        <td class="hide-mobile">${popup.startDate || '-'}</td>
-                        <td class="hide-mobile">${popup.endDate || '-'}</td>
+                        <td class="hide-mobile">${popup.start_date || '-'}</td>
+                        <td class="hide-mobile">${popup.end_date || '-'}</td>
                         <td><span class="popup-status ${statusClass}">${status}</span></td>
                         <td>
                             <div class="action-buttons">
@@ -723,9 +728,9 @@
         function getPopupStatus(popup) {
             const today = new Date().toISOString().split('T')[0];
             
-            if (!popup.startDate && !popup.endDate) return '상시';
-            if (popup.startDate && today < popup.startDate) return '예정';
-            if (popup.endDate && today > popup.endDate) return '종료';
+            if (!popup.start_date && !popup.end_date) return '상시';
+            if (popup.start_date && today < popup.start_date) return '예정';
+            if (popup.end_date && today > popup.end_date) return '종료';
             return '진행중';
         }
         
@@ -768,15 +773,15 @@
             document.getElementById('modalTitle').textContent = '팝업 수정';
             
             // 체크박스 설정
-            document.getElementById('use-title').checked = popup.useTitle !== false;
-            document.getElementById('use-content').checked = popup.useContent !== false;
-            document.getElementById('use-image').checked = popup.useImage === true;
+            document.getElementById('use-title').checked = popup.use_title !== false;
+            document.getElementById('use-content').checked = popup.use_content !== false;
+            document.getElementById('use-image').checked = popup.use_image === true;
             
             // 값 설정
             document.getElementById('popup-title').value = popup.title || '';
             document.getElementById('popup-content').value = popup.content || '';
-            document.getElementById('start-date').value = popup.startDate || '';
-            document.getElementById('end-date').value = popup.endDate || '';
+            document.getElementById('start-date').value = popup.start_date || '';
+            document.getElementById('end-date').value = popup.end_date || '';
             
             // 그룹 상태 설정
             toggleField('title');
@@ -799,13 +804,13 @@
             
             if (popup.title) message += `제목: ${popup.title}\n`;
             if (popup.content) message += `내용: ${popup.content}\n`;
-            message += `기간: ${popup.startDate || '시작일 없음'} ~ ${popup.endDate || '종료일 없음'}\n`;
+            message += `기간: ${popup.start_date || '시작일 없음'} ~ ${popup.end_date || '종료일 없음'}\n`;
             if (popup.image) message += '이미지: 있음';
             
             alert(message);
         }
         
-        // 팝업 삭제 (서버에서)
+        // 팝업 삭제 (Supabase에서)
         async function deletePopup(index) {
             if (!confirm('이 팝업을 삭제하시겠습니까?')) {
                 return;
@@ -814,12 +819,13 @@
             const popup = popups[index];
             
             try {
-                const response = await fetch(`${API_BASE}/api/popups/${popup.id}`, {
-                    method: 'DELETE'
-                });
+                const { error } = await supabase
+                    .from('popups')
+                    .delete()
+                    .eq('id', popup.id);
                 
-                if (!response.ok) {
-                    throw new Error('서버에서 삭제하지 못했습니다.');
+                if (error) {
+                    throw error;
                 }
                 
                 // 성공시 로컬 배열에서도 제거
@@ -885,7 +891,7 @@
             document.getElementById('upload-text').textContent = '클릭하여 이미지를 선택하세요';
         }
         
-        // 팝업 저장 (서버에)
+        // 팝업 저장 (Supabase에)
         async function savePopup() {
             const useTitle = document.getElementById('use-title').checked;
             const useContent = document.getElementById('use-content').checked;
@@ -919,38 +925,41 @@
             }
             
             const popupData = {
-                id: editingIndex !== null ? popups[editingIndex].id : null, // 새 팝업은 null
-                useTitle: useTitle,
-                useContent: useContent,
-                useImage: useImage,
+                use_title: useTitle,
+                use_content: useContent,
+                use_image: useImage,
                 title: title,
                 content: content,
-                startDate: startDate,
-                endDate: endDate,
+                start_date: startDate || null,
+                end_date: endDate || null,
                 image: useImage ? document.getElementById('preview-img').src : null,
-                savedAt: new Date().toISOString()
+                saved_at: new Date().toISOString()
             };
             
             try {
-                const response = await fetch(`${API_BASE}/api/popups`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(popupData)
-                });
+                let result;
                 
-                if (!response.ok) {
-                    throw new Error('서버에 저장하지 못했습니다.');
-                }
-                
-                const result = await response.json();
-                
-                // 로컬 배열 업데이트
                 if (editingIndex !== null) {
-                    popups[editingIndex] = result.popup;
+                    // 수정
+                    const { data, error } = await supabase
+                        .from('popups')
+                        .update(popupData)
+                        .eq('id', popups[editingIndex].id)
+                        .select();
+                    
+                    if (error) throw error;
+                    result = data[0];
+                    popups[editingIndex] = result;
                 } else {
-                    popups.push(result.popup);
+                    // 새로 추가
+                    const { data, error } = await supabase
+                        .from('popups')
+                        .insert([popupData])
+                        .select();
+                    
+                    if (error) throw error;
+                    result = data[0];
+                    popups.unshift(result);
                 }
                 
                 closeModal();
