@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소개 - 공방 사람들 협동조합</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+            background-color: #faf8f5;
+            color: #3a3a3a;
+            word-break: keep-all;
+            word-wrap: break-word;
+        }
+        
+        /* 네비게이션바 스타일 */
+        .navbar {
+            width: 250px;
+            background-color: #2c2c2c;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-header {
+            padding: 30px 20px;
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #444;
+        }
+        
+        .navbar-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .navbar-subtitle {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .navbar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-section {
+            margin-bottom: 30px;
+        }
+        
+        .menu-label {
+            padding: 0 20px;
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .menu-item {
+            display: block;
+            padding: 12px 20px;
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .menu-item:hover {
+            background-color: #3a3a3a;
+            color: white;
+        }
+        
+        .menu-item.active {
+            background-color: #6b5344;
+            color: white;
+        }
+        
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: #fff;
+        }
+        
+        /* 햄버거 메뉴 버튼 (모바일용) */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background: #6b5344;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .mobile-menu-btn:hover {
+            background: #5a4337;
+        }
+        
+        /* 메인 컨텐츠 조정 */
+        .main-wrapper {
+            margin-left: 250px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+        
+        .wrap {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* 헤더 영역 */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-top: 30px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            color: #6b5344;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+        
+        .header span {
+            color: #9b8579;
+            font-size: 14px;
+        }
+        
+        /* 탭 버튼 스타일 */
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            margin: 0 auto 40px;
+            max-width: 600px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            padding: 4px;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 12px 20px;
+            background-color: transparent;
+            color: #666;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+        
+        .tab-button:hover {
+            background-color: rgba(107, 83, 68, 0.1);
+        }
+        
+        .tab-button.active {
+            background-color: #6b5344;
+            color: white;
+            box-shadow: 0 2px 8px rgba(107, 83, 68, 0.3);
+        }
+        
+        /* 메인 컨텐츠 */
+        .content {
+            background: white;
+            padding: 45px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            line-height: 1.9;
+        }
+        
+        /* 탭 컨텐츠 */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* 자료실 테이블 스타일 */
+        .resource-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .resource-table thead {
+            background-color: #f8f9fa;
+            border-top: 2px solid #6b5344;
+            border-bottom: 2px solid #6b5344;
+        }
+        
+        .resource-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #3a3a3a;
+        }
+        
+        .resource-table tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .resource-table tbody tr:hover {
+            background-color: #faf8f5;
+        }
+        
+        .resource-table td {
+            padding: 12px;
+            color: #666;
+        }
+        
+        .resource-table .num-col {
+            width: 60px;
+            text-align: center;
+            color: #999;
+        }
+        
+        .resource-table .title-col {
+            color: #3a3a3a;
+        }
+        
+        /* 자료실 링크 스타일 - 파란색 + 밑줄로 변경 */
+        .resource-table a {
+            color: #0066cc;
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+        
+        .resource-table a:hover {
+            color: #0052cc;
+            text-decoration: underline;
+        }
+        
+        .file-type {
+            display: inline-block;
+            padding: 2px 6px;
+            background-color: #f0f0f0;
+            color: #666;
+            font-size: 11px;
+            border-radius: 3px;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+        
+        .file-type.pdf {
+            background-color: #ffe4e4;
+            color: #c0392b;
+        }
+        
+        .file-type.hwp {
+            background-color: #e4f0ff;
+            color: #2980b9;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 스크롤 애니메이션 */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-up.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            /* 모바일에서 네비게이션바 숨김 */
+            .navbar {
+                transform: translateX(-100%);
+            }
+            
+            .navbar.open {
+                transform: translateX(0);
+            }
+            
+            /* 모바일에서 햄버거 메뉴 표시 */
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            /* 모바일에서 메인 컨텐츠 전체 너비 */
+            .main-wrapper {
+                margin-left: 0;
+            }
+            
+            .wrap {
+                padding: 60px 15px 20px 15px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            /* 모바일에서 탭 버튼 */
+            .tab-container {
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px;
+            }
+            
+            .tab-button {
+                width: 100%;
+                text-align: center;
+            }
+            
+            /* 모바일에서 테이블 스크롤 */
+            .table-wrapper {
+                overflow-x: auto;
+            }
+            
+            .resource-table {
+                min-width: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 모바일 햄버거 메뉴 버튼 -->
+    <button class="mobile-menu-btn" onclick="toggleNavbar()">☰</button>
+    
+    <!-- 네비게이션바 -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-header">
+            <a href="index.html" class="navbar-title">공방 사람들</a>
+            <div class="navbar-subtitle">협동조합</div>
+        </div>
+        
+        <div class="navbar-menu">
+            <div class="menu-section">
+                <div class="menu-label">메인</div>
+                <a href="index.html" class="menu-item">홈</a>
+                <a href="about.html" class="menu-item active">협동조합</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 메인 컨텐츠 래퍼 -->
+    <div class="main-wrapper">
+        <div class="wrap">
+            <div class="header">
+                <h1>협동조합</h1>
+            </div>
+            
+            <!-- 탭 버튼 추가 -->
+            <div class="tab-container">
+                <button class="tab-button active" onclick="showTab('tab1')">협동조합이란?</button>
+                <button class="tab-button" onclick="showTab('tab2')">협동조합 차이점</button>
+                <button class="tab-button" onclick="showTab('tab3')">자료실</button>
+            </div>
+            
+            <div class="content">
+                <!-- 탭 1: 협동조합이란? -->
+                <div id="tab1" class="tab-content active">
+                    <h2 style="color: #6b5344; margin-bottom: 30px; font-size: 24px;" class="fade-up">협동조합이란?</h2>
+                    
+                    <div style="background-color: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px;" class="fade-up">
+                        <p style="line-height: 1.8; color: #3a3a3a; margin: 0;">
+                            협동조합 설립은 5인 이상의 발기인이 모여 정관 작성, 설립동의자 모집, 창립총회 개최, 설립신고, 사무인계, 출자금 납입, 설립등기 등 절차를 거쳐야 하며, 일반협동조합은 시·도지사에게 신고 후 설립등기를, 사회적협동조합은 기획재정부 등 관계 중앙행정기관에 인가를 받아야 합니다.
+                        </p>
+                    </div>
+                    
+                    <h3 style="color: #6b5344; font-size: 20px; margin: 35px 0 25px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;" class="fade-up">주요 절차 및 요건</h3>
+                    
+                    <div style="background-color: #faf8f5; padding: 30px; border-radius: 8px; margin-bottom: 20px;" class="fade-up">
+                        <div style="margin-bottom: 25px;" class="fade-up">
+                            <h4 style="color: #5a4337; font-size: 17px; margin-bottom: 12px;">1. 발기인 모집 및 정관 작성</h4>
+                            <p style="margin-left: 20px; color: #666; line-height: 1.7;">
+                                5인 이상의 조합원 자격을 갖춘 발기인이 모여야 하며, 정관에는 목적, 명칭, 구역 등 필수사항을 포함해야 합니다.
+                            </p>
+                        </div>
+                        
+                        <div style="margin-bottom: 25px;" class="fade-up">
+                            <h4 style="color: #5a4337; font-size: 17px; margin-bottom: 12px;">2. 설립동의자 모집 및 창립총회</h4>
+                            <p style="margin-left: 20px; color: #666; line-height: 1.7;">
+                                발기인은 창립총회 전까지 설립동의자를 모아야 하며, 창립총회에서는 정관, 사업계획, 예산, 임원 선임 등에 대해 과반수 출석과 출석자 2/3 이상의 찬성으로 의결합니다.
+                            </p>
+                        </div>
+                        
+                        <div style="margin-bottom: 25px;" class="fade-up">
+                            <h4 style="color: #5a4337; font-size: 17px; margin-bottom: 12px;">3. 설립신고 및 등기</h4>
+                            <p style="margin-left: 20px; color: #666; line-height: 1.7;">
+                                설립신고는 주된 사무소 소재지 관할 시·도지사에게 하며, 설립등기는 등기소에 출자금 납입 후 14일 이내에 해야 합니다.
+                            </p>
+                        </div>
+                        
+                        <div style="margin-bottom: 25px;" class="fade-up">
+                            <h4 style="color: #5a4337; font-size: 17px; margin-bottom: 12px;">4. 사회적협동조합의 경우</h4>
+                            <p style="margin-left: 20px; color: #666; line-height: 1.7;">
+                                사회적협동조합은 기획재정부 등 관계 중앙행정기관에 설립인가를 받아야 하며, 인가 신청 시 정관, 창립총회 의사록, 임원명부, 사업계획서 등 서류를 제출해야 합니다.
+                            </p>
+                        </div>
+                        
+                        <div style="margin: 0;" class="fade-up">
+                            <h4 style="color: #5a4337; font-size: 17px; margin-bottom: 12px;">5. 사업자등록</h4>
+                            <p style="margin-left: 20px; color: #666; line-height: 1.7;">
+                                설립 후 사업개시일로부터 20일 이내에 관할 세무서에 사업자등록을 해야 합니다.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="background-color: #fff9f0; padding: 20px 25px; border-radius: 8px; margin-top: 30px; border-left: 4px solid #6b5344;" class="fade-up">
+                        <p style="margin: 0; color: #5a4337; line-height: 1.8;">
+                            이처럼 협동조합 설립은 법적 절차와 요건을 준수해야 하며, 일반협동조합과 사회적협동조합은 설립 절차와 인가 기관에 차이가 있습니다.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 탭 2: 협동조합과 사회적 협동조합 차이점 -->
+                <div id="tab2" class="tab-content">
+                    <h2 style="color: #6b5344; margin-bottom: 30px; font-size: 24px;" class="fade-up">협동조합과 사회적 협동조합 차이점</h2>
+                    
+                    <div style="background-color: #fff9f0; padding: 20px; border-radius: 8px; margin-bottom: 30px;" class="fade-up">
+                        <h3 style="color: #5a4337; font-size: 19px; margin-bottom: 15px;">협동조합의 정의</h3>
+                        <p style="margin-bottom: 10px;">
+                            협동조합기본법 제2조 제1호에 따르면, 협동조합은 조합원의 권익을 향상하고 지역사회에 기여하기 위해 재화나 용역의 구매, 생산, 판매 등을 활동으로 수행하는 <strong>영리 목적의 사단 조직</strong>입니다.
+                        </p>
+                        <p style="margin: 0; color: #666;">
+                            즉, 조합원의 공통된 출자하고, 운영하며, 이익을 나누는 구조로, 민간 사업자들이 함께 경제적 이익을 추구하기 위한 제도입니다.
+                        </p>
+                    </div>
+                    
+                    <div style="background-color: #f5f9ff; padding: 20px; border-radius: 8px; margin-bottom: 30px;" class="fade-up">
+                        <h3 style="color: #5a4337; font-size: 19px; margin-bottom: 15px;">사회적협동조합의 정의</h3>
+                        <p style="margin-bottom: 15px;">
+                            사회적협동조합은 같은 협동조합기본법상 제2조 제3호에 명시된 개념입니다. 협동조합 중에서도 특히 공익을 목적으로 하는 <strong>비영리법인</strong>으로, 반드시 하나 이상의 공익 목적을 수행해야 합니다.
+                        </p>
+                        <p style="margin-bottom: 10px; font-weight: 500;">사회적협동조합은 다음의 목적 중 하나 이상을 포함해야 합니다:</p>
+                        <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                            <li>취약계층에게 사회서비스 또는 일자리 제공</li>
+                            <li>지역 주민의 복리 증진</li>
+                            <li>지역사회 공헌</li>
+                        </ul>
+                        <p style="margin-top: 15px; color: #666; font-style: italic;">
+                            협동조합이 '조합원 중심의 영리 활동'이라면, 사회적협동조합은 '지역사회 중심의 공익 활동'에 방점이 찍혀 있습니다.
+                        </p>
+                    </div>
+                    
+                    <!-- 법적 성격 비교표 추가 -->
+                    <div style="margin: 35px 0;" class="fade-up">
+                        <h3 style="color: #6b5344; font-size: 20px; margin-bottom: 20px;">
+                            <span style="color: #28a745;"></span> 법적 성격의 차이
+                        </h3>
+                        <table style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                            <thead>
+                                <tr style="background-color: #f8f9fa;">
+                                    <th style="padding: 15px; border: 1px solid #dee2e6; text-align: center; width: 20%;">항목</th>
+                                    <th style="padding: 15px; border: 1px solid #dee2e6; text-align: center; color: #3a3a3a; font-weight: 600; width: 40%;">협동조합</th>
+                                    <th style="padding: 15px; border: 1px solid #dee2e6; text-align: center; color: #3a3a3a; font-weight: 600; width: 40%;">사회적협동조합</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center; font-weight: 500; background-color: #fafafa;">법적 형태</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center; color: #3a3a3a;">영리법인</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center; color: #3a3a3a;">비영리법인</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center; font-weight: 500; background-color: #fafafa;">설립 방식</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">신고제 (지자체 신고)</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">인가제 (기획재정부 또는 주무부처 인가)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center; font-weight: 500; background-color: #fafafa;">설립 주체</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">5인 이상의 발기인</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">5인 이상의 발기인 + 공익 목적 명시</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center; font-weight: 500; background-color: #fafafa;">배당 가능 여부</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">가능 (출자배당 및 이용배당 가능)</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">불가 (배당금 전면 금지)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center; font-weight: 500; background-color: #fafafa;">청산 시 잔여재산 귀속</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">정관에 따라 자유롭게 결정</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">국고 또는 공익법인 귀속</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center; font-weight: 500; background-color: #fafafa;">정관 요건</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">법령상 필수 항목 최소화</td>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">공익성 반영 의무 조항 다수 포함</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h3 style="color: #6b5344; font-size: 20px; margin: 35px 0 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;" class="fade-up">
+                        설립 목적의 차이: '조합원'과 '지역사회'
+                    </h3>
+                    <p style="margin-bottom: 20px; line-height: 1.8;" class="fade-up">
+                        협동조합의 중심은 <strong>조합원</strong>입니다. 출자한 조합원들이 스스로의 경제적 이익을 도모하기 위해 설립하며, 주로 공동구매, 공동판매, 협업사업 등이 주된 활동입니다.
+                    </p>
+                    <p style="margin-bottom: 25px; line-height: 1.8;" class="fade-up">
+                        반면 사회적협동조합은 <strong>지역사회</strong>의 복지 향상, 취약계층 지원, 공공서비스 보완 등을 목적으로 하기 때문에, 설립 초기부터 운영방향이 다릅니다. 즉, 누구를 위한 조직이냐에 따라 설계 자체가 달라집니다.
+                    </p>
+                    
+                    <div style="display: flex; gap: 20px; margin: 30px 0;" class="fade-up">
+                        <div style="flex: 1; background-color: #faf8f5; padding: 20px; border-radius: 8px;">
+                            <h4 style="color: #5a4337; margin-bottom: 10px;">협동조합 예시</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #666; line-height: 1.6;">
+                                <li>도시재생협동조합</li>
+                                <li>마을사 협동조합</li>
+                                <li>중소상공인 공동구매조합</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1; background-color: #f5f9ff; padding: 20px; border-radius: 8px;">
+                            <h4 style="color: #5a4337; margin-bottom: 10px;">사회적협동조합 예시</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #666; line-height: 1.6;">
+                                <li>발달장애인 일자리 사회적협동조합</li>
+                                <li>노인돌봄 사회적협동조합</li>
+                                <li>지역보건의료 사회적협동조합</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: #6b5344; font-size: 20px; margin: 35px 0 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;" class="fade-up">
+                        '공공성'의 여부가 모든 차이를 만든다
+                    </h3>
+                    <p style="margin-bottom: 20px; line-height: 1.8;" class="fade-up">
+                        협동조합은 기본적으로 <strong>'경제적 이익'</strong>을 중심에 둔 조직입니다. 반면 사회적협동조합은 <strong>'공공성'</strong>을 중심으로 사업을 운영하며, 공익, 환경, 취약계층, 인가기관, 공시의무, 배당 제한 등 전반적인 구도가 법적으로도 차별화되어 있습니다.
+                    </p>
+                    <p style="margin-bottom: 25px; line-height: 1.8;" class="fade-up">
+                        행정적으로 보면 협동조합은 '자격적 영리조직', 사회적협동조합은 '인가받은 비영리 조직'으로 구분되며, 인가 여부에 따라 권익 범위 또한 다릅니다.
+                    </p>
+                    
+                    <h3 style="color: #6b5344; font-size: 20px; margin: 35px 0 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;" class="fade-up">
+                        어떤 형태로 설립해야 할까?
+                    </h3>
+                    <p style="margin-bottom: 20px;" class="fade-up">협동조합을 설립하고자 할 때 가장 먼저 고려해야 할 것은 운영 목적입니다.</p>
+                    <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px;" class="fade-up">
+                        <p style="margin-bottom: 10px;">
+                            <strong style="color: #3a3a3a;">→ 영리 추구 + 조합원 경제 증진 중심</strong> = 협동조합
+                        </p>
+                        <p style="margin: 0;">
+                            <strong style="color: #3a3a3a;">→ 공익 추구 + 지역사회 발전 중심</strong> = 사회적협동조합
+                        </p>
+                    </div>
+                    <p style="margin-bottom: 25px; line-height: 1.8;" class="fade-up">
+                        그리고 사회적협동조합은 인가 과정에서 '주사업 40% 이상' 등 구체적인 요건도 요구되므로, 설립 전 단계부터 전문가와 비판분석식 자문을 받는 것이 안전합니다.
+                    </p>
+                    
+                    <div style="background-color: #fff9f0; padding: 20px 25px; border-radius: 8px; margin-top: 35px; border-left: 4px solid #6b5344;" class="fade-up">
+                        <h4 style="color: #5a4337; margin-bottom: 12px; font-size: 18px;">정리하자면: 법적 근거 위에 명확한 구분 필요</h4>
+                        <p style="margin: 0; line-height: 1.8; color: #666;">
+                            협동조합과 사회적협동조합은 같은 협동조합기본법을 근거로 하나, 시장성과 운영 방식은 매우 다릅니다. 따라서 설립 취지와 목적을 충분히 검토한 후, 사업 구조, 운영방식, 분배 방안 등을 명확히 규정하는 것이 필요합니다.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 탭 3: 자료실 -->
+                <div id="tab3" class="tab-content">
+                    <h2 style="color: #6b5344; margin: 50px 0 30px; font-size: 24px;" class="fade-up">협동조합 서식 자료</h2>
+                    
+                    <!-- 안내 메시지 추가 -->
+                    <div style="background-color: #f0f8ff; padding: 15px 20px; margin-bottom: 25px; border-radius: 6px; border-left: 4px solid #6b5344;" class="fade-up">
+                        <p style="margin: 0; color: #333; line-height: 1.6;">
+                            파일을 클릭하면 바로 다운로드됩니다. 
+                            다운로드가 안 될 경우 우클릭 → '다른 이름으로 저장'을 선택하세요.
+                        </p>
+                    </div>
+                    
+                    <div class="table-wrapper fade-up">
+                        <table class="resource-table">
+                            <thead>
+                                <tr>
+                                    <th class="num-col">번호</th>
+                                    <th>자료명</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="num-col">1</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=13aEHL6jk2h4n17AjJiWhnHLQb-Pj_TxB">
+                                            설립신고서_예시
+                                            <span class="file-type pdf">PDF</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">2</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1LgiF1pZaiQvLN8JlQZwIbVRA3rs3ro3r">
+                                            ○○ 협동조합 정관_작성용_예시파일_221104
+                                            <span class="file-type hwp">HWP</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">3</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1Z0jupBF3R0CD06fWv4lP5QLF26StWls1">
+                                            정관 예시
+                                            <span class="file-type hwp">HWP</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">4</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1Jd_eJ4PrZgPkjgLqvd3Mqvd-GE_bOBex">
+                                            창립총회 개최 공고문 예시
+                                            <span class="file-type hwp">HWP</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">5</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1CXZ9GQy1_TQ8aKJq5l9-HCiHWC1oJIrn">
+                                            창립총회 개최 공고문_예시
+                                            <span class="file-type pdf">PDF</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">6</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1w5kz3djW6bA058lHttOpzsLfLAdcFGwD">
+                                            창립총회 의사록 예시
+                                            <span class="file-type hwp">HWP</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">7</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1E4CBY_K2CigTlsdJAgRFl_R-dXRFBtOC">
+                                            창립총회 의사록_예시
+                                            <span class="file-type pdf">PDF</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">8</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1a5398oXBAHE9Yw7wpA98WXN4dBceRLnc">
+                                            임원명부
+                                            <span class="file-type hwp">HWP</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">9</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=172rVwM9rObTG1nahwks544Vlljtxa1cw">
+                                            사업계획서
+                                            <span class="file-type hwp">HWP</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">10</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1W5yeYI7eADAqW0Ap_SNagi73cym0ohNe">
+                                            사업계획서_예시(세부사업계획서 추가)
+                                            <span class="file-type pdf">PDF</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">11</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1B3jVXeL2S54CD54xtky8hGB_qriZG0eB">
+                                            수입지출예산서
+                                            <span class="file-type hwp">HWP</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">12</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1ZkNrDRB34tL0Tqq-cfD86xm-WJEPaMTf">
+                                            수입지출예산서_예시
+                                            <span class="file-type pdf">PDF</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">13</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1qEauSo88jbSirqpntEbXiHkfoyO5Otme">
+                                            출자자 명부_예시
+                                            <span class="file-type pdf">PDF</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">14</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1wLYP8338Py7EWoNhohVz90U48Eq2Vy3h">
+                                            출자자명부 예시(출자 1좌당 금액과 조합원 또는 회원별로 인수하려는 출자좌수를 적은 서류)
+                                            <span class="file-type hwp">HWP</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="num-col">15</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1oWkFoJjXqP36JP4HXsow5vb_rkK6lG5d">
+                                            발기인 및 설립동의자 명부
+                                            <span class="file-type hwp">HWP</span>
+                                        </a>
+                                    </td>
+                                </tr>
+								<tr>
+                                    <td class="num-col">16</td>
+                                    <td class="title-col">
+                                        <a href="https://drive.google.com/uc?export=download&id=1zL782pQUgMcGwE3WowL8X0SoAAUbJvbm">
+                                            발기인 및 설립동의자 명부_예시
+                                            <span class="file-type pdf">PDF</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 네비게이션바 토글
+        function toggleNavbar() {
+            const navbar = document.getElementById('navbar');
+            navbar.classList.toggle('open');
+        }
+        
+        // 탭 전환 기능
+        function showTab(tabId) {
+            // 모든 탭 컨텐츠 숨기기
+            const allTabs = document.querySelectorAll('.tab-content');
+            allTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 모든 탭 버튼 비활성화
+            const allButtons = document.querySelectorAll('.tab-button');
+            allButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // 선택한 탭 보이기
+            document.getElementById(tabId).classList.add('active');
+            
+            // 선택한 버튼 활성화
+            const activeButton = Array.from(allButtons).find(button => {
+                if(tabId === 'tab1' && button.textContent === '협동조합이란?') return true;
+                if(tabId === 'tab2' && button.textContent === '협동조합 차이점') return true;
+                if(tabId === 'tab3' && button.textContent === '자료실') return true;
+                return false;
+            });
+            if(activeButton) activeButton.classList.add('active');
+            
+            // 탭 전환 시 스크롤 애니메이션 초기화
+            setTimeout(() => {
+                scrollAnimation();
+            }, 100);
+        }
+        
+        // 스크롤 애니메이션
+        function scrollAnimation() {
+            const activeTab = document.querySelector('.tab-content.active');
+            if (!activeTab) return;
+            
+            const elements = activeTab.querySelectorAll('.fade-up');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementBottom = element.getBoundingClientRect().bottom;
+                
+                // 화면에 들어오면 나타나고, 화면 밖으로 나가면 다시 숨김
+                if (elementTop < window.innerHeight - 50 && elementBottom > 0) {
+                    element.classList.add('show');
+                } else {
+                    element.classList.remove('show');
+                }
+            });
+        }
+        
+        // 페이지 로드 시 실행
+        window.addEventListener('load', () => {
+            scrollAnimation();
+        });
+        
+        // 스크롤 이벤트 리스너
+        window.addEventListener('scroll', scrollAnimation);
+    </script>
+</body>
+</html>

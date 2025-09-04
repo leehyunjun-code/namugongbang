@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공방 사람들 협동조합</title>
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -18,6 +19,114 @@
             color: #3a3a3a;
             word-break: keep-all;
             word-wrap: break-word;
+        }
+        
+        /* 네비게이션바 스타일 */
+        .navbar {
+            width: 250px;
+            background-color: #2c2c2c;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-header {
+            padding: 30px 20px;
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #444;
+        }
+        
+        .navbar-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .navbar-subtitle {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .navbar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-section {
+            margin-bottom: 30px;
+        }
+        
+        .menu-label {
+            padding: 0 20px;
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .menu-item {
+            display: block;
+            padding: 12px 20px;
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .menu-item:hover {
+            background-color: #3a3a3a;
+            color: white;
+        }
+        
+        .menu-item.active {
+            background-color: #6b5344;
+            color: white;
+        }
+        
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: #fff;
+        }
+        
+        /* 햄버거 메뉴 버튼 (모바일용) */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background: #6b5344;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .mobile-menu-btn:hover {
+            background: #5a4337;
+        }
+        
+        /* 메인 컨텐츠 조정 */
+        .main-wrapper {
+            margin-left: 250px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
         }
         
         .wrap {
@@ -386,8 +495,27 @@
         
         /* 모바일 반응형 */
         @media (max-width: 768px) {
+            /* 모바일에서 네비게이션바 숨김 */
+            .navbar {
+                transform: translateX(-100%);
+            }
+            
+            .navbar.open {
+                transform: translateX(0);
+            }
+            
+            /* 모바일에서 햄버거 메뉴 표시 */
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            /* 모바일에서 메인 컨텐츠 전체 너비 */
+            .main-wrapper {
+                margin-left: 0;
+            }
+            
             .wrap {
-                padding: 20px 15px;
+                padding: 60px 15px 20px 15px;
             }
             
             h1 {
@@ -469,54 +597,79 @@
     </style>
 </head>
 <body>
-    <div class="wrap">
-        <div class="header">
-            <h1>공방 사람들 협동조합</h1>
-            <span>Wood, People, and Stories</span>
+    <!-- 모바일 햄버거 메뉴 버튼 -->
+    <button class="mobile-menu-btn" onclick="toggleNavbar()">☰</button>
+    
+    <!-- 네비게이션바 -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-header">
+            <a href="index.html" class="navbar-title">공방 사람들</a>
+            <div class="navbar-subtitle">협동조합</div>
         </div>
         
-        <div class="content">
-            <div class="intro">
-                나무와 사람, 그리고 이야기.
+        <div class="navbar-menu">
+            <div class="menu-section">
+                <div class="menu-label">메인</div>
+                <a href="index.html" class="menu-item active">홈</a>
+                <a href="about.html" class="menu-item">협동조합</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 메인 컨텐츠 래퍼 -->
+    <div class="main-wrapper">
+        <div class="wrap">
+            <div class="header">
+                <h1>공방 사람들 협동조합</h1>
+                <span>Wood, People, and Stories</span>
             </div>
             
-            <p class="fade-up">
-                우리는 각자의 작은 공방에서 시작했습니다. 누군가는 횡성에서, 누군가는 양평·수원·김포에서 나무를 만지며, 손끝으로 온기를 담아 세상에 내놓았습니다.
-            </p>
-            
-            <p class="fade-up">
-                하지만 더 많은 사람들과 함께 배우고, 만들고, 나누고 싶었습니다.<br>
-                그래서 우리는 모였습니다. <strong class="highlight-text">"공방 사람들 협동조합"</strong>.
-            </p>
-            
-            <div class="img-area fade-up">
-                <div class="img-box">
-                    <img src="class.jpg" alt="목공 수업 현장">
+            <div class="content">
+                <div class="intro">
+                    나무와 사람, 그리고 이야기.
                 </div>
-            </div>
-            
-            <div class="video-area fade-up">
-                <div class="video-box">
-                    <video controls autoplay muted loop playsinline>
-                        <source src="background.mp4" type="video/mp4">
-                        브라우저가 비디오를 지원하지 않습니다.
-                    </video>
+                
+                <p class="fade-up">
+                    우리는 각자의 작은 공방에서 시작했습니다. 누군가는 횡성에서, 누군가는 양평·수원·김포에서 나무를 만지며, 손끝으로 온기를 담아 세상에 내놓았습니다.
+                </p>
+                
+                <p class="fade-up">
+                    하지만 더 많은 사람들과 함께 배우고, 만들고, 나누고 싶었습니다.<br>
+                    그래서 우리는 모였습니다. <strong class="highlight-text">"공방 사람들 협동조합"</strong>.
+                </p>
+                
+                <div class="video-area fade-up">
+                    <div class="video-box">
+                        <video controls autoplay muted loop playsinline>
+                            <source src="together.mp4" type="video/mp4">
+                            브라우저가 비디오를 지원하지 않습니다.
+                        </video>
+                    </div>
                 </div>
-            </div>
-            
-            <p class="fade-up">
-                이곳은 단순히 나무를 깎고 가구를 만드는 곳이 아닙니다.<br>
-                <strong>사람과 사람을 이어주고, 지역과 마음을 연결하며, 나무에 새로운 이야기를 심어가는 공동체</strong>입니다.
-            </p>
-            
-            <p class="fade-up">
-                작은 손길이 모여 큰 숲을 이루듯, 우리의 공방도 함께 모여 더 큰 꿈을 꿉니다. 앞으로 사회적기업으로 성장하며, <strong>지속 가능한 나눔과 창작의 길</strong>을 함께 걸어가겠습니다.
-            </p>
-            
-            <div class="ending fade-up">
-                <span class="ending-text">
-                    나무와 사람, 그 사이의 따뜻한 이야기에 여러분을 초대합니다.
-                </span>
+                
+                <div class="video-area fade-up">
+                    <div class="video-box">
+                        <video controls autoplay muted loop playsinline>
+                            <source src="background.mp4" type="video/mp4">
+                            브라우저가 비디오를 지원하지 않습니다.
+                        </video>
+                    </div>
+                </div>
+                
+                <p class="fade-up">
+                    이곳은 단순히 나무를 깎고 가구를 만드는 곳이 아닙니다.<br>
+                    <strong>사람과 사람을 이어주고, 지역과 마음을 연결하며, 나무에 새로운 이야기를 심어가는 공동체</strong>입니다.
+                </p>
+                
+                <p class="fade-up">
+                    작은 손길이 모여 큰 숲을 이루듯, 우리의 공방도 함께 모여 더 큰 꿈을 꿉니다. 앞으로 사회적기업으로 성장하며, <strong>지속 가능한 나눔과 창작의 길</strong>을 함께 걸어가겠습니다.
+                </p>
+                
+                <div class="ending fade-up">
+                    <span class="ending-text">
+                        나무와 사람, 그 사이의 따뜻한 이야기에 여러분을 초대합니다.
+                    </span>
+                </div>
             </div>
         </div>
     </div>
@@ -550,6 +703,12 @@
             } catch (error) {
                 console.error('Supabase 초기화 실패:', error);
             }
+        }
+        
+        // 네비게이션바 토글
+        function toggleNavbar() {
+            const navbar = document.getElementById('navbar');
+            navbar.classList.toggle('open');
         }
         
         // 스크롤 애니메이션
@@ -747,4 +906,4 @@
         });
     </script>
 </body>
-</html>
+</html>#
