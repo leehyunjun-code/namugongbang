@@ -20,7 +20,7 @@
             min-height: 100vh;
         }
         
-        /* 사이드바 스타일 */
+        /* 사이드바 */
         .sidebar {
             width: 250px;
             background-color: #2c2c2c;
@@ -95,7 +95,7 @@
             background-color: #fff;
         }
         
-        /* 메인 컨텐츠 영역 */
+        /* 메인 컨텐츠 */
         .main-content {
             margin-left: 250px;
             flex: 1;
@@ -118,14 +118,6 @@
             font-size: 28px;
         }
         
-        /* 팝업 목록 테이블 */
-        .list-section {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
         .btn-add {
             padding: 10px 20px;
             background: #6b5344;
@@ -138,6 +130,14 @@
         
         .btn-add:hover {
             background: #5a4337;
+        }
+        
+        /* 팝업 목록 */
+        .list-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .popup-table {
@@ -163,6 +163,14 @@
             background: #fafafa;
         }
         
+        .popup-thumbnail {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            background: #f5f5f5;
+        }
+        
         .popup-status {
             padding: 4px 8px;
             border-radius: 4px;
@@ -183,14 +191,6 @@
         .status-ended {
             background: #f8d7da;
             color: #721c24;
-        }
-        
-        .popup-thumbnail {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 4px;
-            background: #f5f5f5;
         }
         
         .action-buttons {
@@ -228,7 +228,7 @@
             color: #999;
         }
         
-        /* 모달 스타일 */
+        /* 모달 */
         .modal {
             display: none;
             position: fixed;
@@ -269,7 +269,6 @@
             color: #999;
         }
         
-        /* 체크박스가 있는 폼 그룹 스타일 */
         .form-group {
             margin-bottom: 20px;
             padding: 15px;
@@ -282,12 +281,9 @@
             opacity: 0.5;
         }
         
+        .form-group.disabled input[type="text"],
         .form-group.disabled textarea,
         .form-group.disabled .image-upload {
-            pointer-events: none;
-        }
-        
-        .form-group.disabled input[type="text"] {
             pointer-events: none;
         }
         
@@ -298,17 +294,9 @@
         }
         
         .form-header input[type="checkbox"] {
-            margin-right: 10px;
             width: 18px;
             height: 18px;
             cursor: pointer;
-        }
-        
-        .form-header label {
-            margin: 0;
-            cursor: pointer;
-            font-weight: 600;
-            color: #6b5344;
         }
         
         label {
@@ -382,15 +370,16 @@
         .image-upload.disabled {
             cursor: not-allowed;
             border-color: #e0e0e0;
+            background-color: #f5f5f5;
         }
         
         .image-preview {
             margin-top: 15px;
-            max-width: 300px;
             display: none;
         }
         
         .image-preview img {
+            max-width: 300px;
             width: 100%;
             height: auto;
             border-radius: 4px;
@@ -461,13 +450,6 @@
             .hide-mobile {
                 display: none;
             }
-            
-            @media (max-width: 480px) {
-                .popup-table th:nth-child(1),
-                .popup-table td:nth-child(1) {
-                    display: none;
-                }
-            }
         }
     </style>
 </head>
@@ -490,7 +472,7 @@
             
             <div class="menu-section">
                 <div class="menu-label">팝업 관리</div>
-                <a href="index.html" class="menu-item active">팝업 목록 관리</a>
+                <a href="#" class="menu-item active">팝업 목록 관리</a>
             </div>
         </nav>
     </div>
@@ -499,11 +481,11 @@
     <div class="main-content">
         <div class="content-header">
             <h1>팝업 목록 관리</h1>
-            <button class="btn-add" onclick="showAddModal()">새 팝업 추가</button>
+            <button class="btn-add" onclick="showModal()">새 팝업 추가</button>
         </div>
         
         <div class="list-section">
-            <div id="popupListContainer">
+            <div id="popupList">
                 <!-- 팝업 목록이 여기에 동적으로 생성됩니다 -->
             </div>
         </div>
@@ -513,96 +495,121 @@
     <div id="popupModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle">새 팝업 추가</h3>
+                <h3 id="modalTitle">새 팝업 추가</h3>
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             
-            <!-- 제목 입력 그룹 -->
-            <div class="form-group" id="title-group">
-                <div class="form-header">
-                    <input type="checkbox" id="use-title" checked onchange="toggleField('title')">
-                    <label for="use-title">제목 사용</label>
-                </div>
-                <input type="text" id="popup-title" placeholder="팝업 제목을 입력하세요">
-            </div>
-            
-            <!-- 내용 입력 그룹 -->
-            <div class="form-group" id="content-group">
-                <div class="form-header">
-                    <input type="checkbox" id="use-content" checked onchange="toggleField('content')">
-                    <label for="use-content">내용 사용</label>
-                </div>
-                <textarea id="popup-content" placeholder="팝업 내용을 입력하세요"></textarea>
-            </div>
-            
-            <!-- 날짜 입력 그룹 -->
-            <div class="form-group">
-                <label>공지 기간</label>
-                <div class="date-group">
-                    <div>
-                        <label style="font-weight: normal; font-size: 14px;">시작 날짜</label>
-                        <input type="date" id="start-date">
+            <form id="popupForm">
+                <!-- 제목 입력 그룹 -->
+                <div class="form-group" id="title-group">
+                    <div class="form-header">
+                        <input type="checkbox" id="use-title" checked>
+                        <label for="use-title" style="display: inline; margin-left: 5px; font-weight: 600; color: #6b5344;">제목 사용</label>
                     </div>
-                    <div>
-                        <label style="font-weight: normal; font-size: 14px;">종료 날짜</label>
-                        <input type="date" id="end-date">
+                    <input type="text" id="title" placeholder="팝업 제목을 입력하세요">
+                </div>
+                
+                <!-- 내용 입력 그룹 -->
+                <div class="form-group" id="content-group">
+                    <div class="form-header">
+                        <input type="checkbox" id="use-content" checked>
+                        <label for="use-content" style="display: inline; margin-left: 5px; font-weight: 600; color: #6b5344;">내용 사용</label>
+                    </div>
+                    <textarea id="content" placeholder="팝업 내용을 입력하세요"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>공지 기간</label>
+                    <div class="date-group">
+                        <div>
+                            <label style="font-weight: normal; font-size: 14px;">시작 날짜</label>
+                            <input type="date" id="startDate">
+                        </div>
+                        <div>
+                            <label style="font-weight: normal; font-size: 14px;">종료 날짜</label>
+                            <input type="date" id="endDate">
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- 이미지 입력 그룹 -->
-            <div class="form-group" id="image-group">
-                <div class="form-header">
-                    <input type="checkbox" id="use-image" onchange="toggleField('image')">
-                    <label for="use-image">이미지 사용</label>
+                
+                <!-- 이미지 입력 그룹 -->
+                <div class="form-group" id="image-group">
+                    <div class="form-header">
+                        <input type="checkbox" id="use-image">
+                        <label for="use-image" style="display: inline; margin-left: 5px; font-weight: 600; color: #6b5344;">이미지 사용</label>
+                    </div>
+                    <div class="image-upload disabled" id="imageUpload" onclick="if(!this.classList.contains('disabled')) document.getElementById('imageFile').click()">
+                        <p id="uploadText">클릭하여 이미지를 선택하세요</p>
+                        <input type="file" id="imageFile" accept="image/*" onchange="previewImage(event)">
+                    </div>
+                    <div class="image-preview" id="imagePreview">
+                        <img id="previewImg" src="" alt="미리보기">
+                        <button type="button" onclick="removeImage()" style="margin-top: 10px; padding: 5px 15px;">이미지 제거</button>
+                    </div>
                 </div>
-                <div class="image-upload disabled" id="image-upload-area" onclick="if(!this.classList.contains('disabled')) document.getElementById('popup-image').click()">
-                    <p id="upload-text">클릭하여 이미지를 선택하세요</p>
-                    <input type="file" id="popup-image" accept="image/*" onchange="previewImage(event)">
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">취소</button>
+                    <button type="submit" class="btn-save">저장</button>
                 </div>
-                <div class="image-preview" id="image-preview">
-                    <img id="preview-img" src="" alt="미리보기">
-                    <button type="button" onclick="removeImage()" style="margin-top: 10px; padding: 5px 15px; font-size: 14px;">이미지 제거</button>
-                </div>
-            </div>
-            
-            <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal()">취소</button>
-                <button class="btn-save" onclick="savePopup()">저장</button>
-            </div>
+            </form>
         </div>
     </div>
     
     <script>
-        // Supabase 설정
-        if (typeof window.SUPABASE_URL === 'undefined') {
-            window.SUPABASE_URL = 'https://qwikdismsngrfyukoihd.supabase.co';
-        }
-        if (typeof window.SUPABASE_ANON_KEY === 'undefined') {
-            window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aWtkaXNtc25ncmZ5dWtvaWhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE3MDE1NjcsImV4cCI6MjA2NzI3NzU2N30.arcdnlPp9W7-wg0HgWVRAqvSmlm34_Th-0ef5oLfU8o';
-        }
-        
-        const supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-        
+        // 전역 변수
+        let supabaseClient = null;
         let popups = [];
-        let editingIndex = null;
+        let currentEditId = null;
         
-        // 페이지 로드 시 팝업 목록 불러오기
-        window.onload = function() {
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initSupabase();
             loadPopups();
-        };
+            
+            // 체크박스 이벤트 리스너 추가
+            const titleCheckbox = document.getElementById('use-title');
+            const contentCheckbox = document.getElementById('use-content');
+            const imageCheckbox = document.getElementById('use-image');
+            
+            if (titleCheckbox) {
+                titleCheckbox.addEventListener('change', function() {
+                    toggleField('title');
+                });
+            }
+            
+            if (contentCheckbox) {
+                contentCheckbox.addEventListener('change', function() {
+                    toggleField('content');
+                });
+            }
+            
+            if (imageCheckbox) {
+                imageCheckbox.addEventListener('change', function() {
+                    toggleField('image');
+                });
+            }
+        });
         
-        // 사이드바 토글
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('open');
+        // Supabase 초기화
+        function initSupabase() {
+            try {
+                const SUPABASE_URL = 'https://qwikdismsngrfyukoihd.supabase.co';
+                const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aWtkaXNtc25ncmZ5dWtvaWhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE3MDE1NjcsImV4cCI6MjA2NzI3NzU2N30.arcdnlPp9W7-wg0HgWVRAqvSmlm34_Th-0ef5oLfU8o';
+                
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('Supabase 초기화 완료');
+            } catch (error) {
+                console.error('Supabase 초기화 실패:', error);
+                alert('데이터베이스 연결에 실패했습니다.');
+            }
         }
         
         // 필드 토글 함수
         function toggleField(field) {
             if (field === 'title') {
                 const checkbox = document.getElementById('use-title');
-                const input = document.getElementById('popup-title');
+                const input = document.getElementById('title');
                 const group = document.getElementById('title-group');
                 
                 if (!checkbox.checked) {
@@ -613,7 +620,7 @@
                 }
             } else if (field === 'content') {
                 const checkbox = document.getElementById('use-content');
-                const textarea = document.getElementById('popup-content');
+                const textarea = document.getElementById('content');
                 const group = document.getElementById('content-group');
                 
                 if (!checkbox.checked) {
@@ -624,7 +631,7 @@
                 }
             } else if (field === 'image') {
                 const checkbox = document.getElementById('use-image');
-                const uploadArea = document.getElementById('image-upload-area');
+                const uploadArea = document.getElementById('imageUpload');
                 const group = document.getElementById('image-group');
                 
                 if (!checkbox.checked) {
@@ -637,31 +644,38 @@
                 }
             }
         }
-        
-        // 팝업 목록 불러오기 (Supabase에서)
+                
+        // 팝업 목록 로드
         async function loadPopups() {
             try {
-                const { data, error } = await supabase
+                if (!supabaseClient) {
+                    throw new Error('데이터베이스가 초기화되지 않았습니다.');
+                }
+                
+                const { data, error } = await supabaseClient
                     .from('popups')
                     .select('*')
                     .order('saved_at', { ascending: false });
                 
-                if (error) {
-                    throw error;
-                }
+                if (error) throw error;
                 
                 popups = data || [];
                 renderPopupList();
                 
             } catch (error) {
-                console.error('팝업 목록 불러오기 오류:', error);
-                alert('팝업 목록을 불러오는데 실패했습니다.');
+                console.error('팝업 목록 로드 실패:', error);
+                document.getElementById('popupList').innerHTML = `
+                    <div class="empty-state">
+                        <h3>데이터를 불러올 수 없습니다</h3>
+                        <p>오류: ${error.message}</p>
+                    </div>
+                `;
             }
         }
         
         // 팝업 목록 렌더링
         function renderPopupList() {
-            const container = document.getElementById('popupListContainer');
+            const container = document.getElementById('popupList');
             
             if (popups.length === 0) {
                 container.innerHTML = `
@@ -688,7 +702,7 @@
                     <tbody>
             `;
             
-            popups.forEach((popup, index) => {
+            popups.forEach(popup => {
                 const status = getPopupStatus(popup);
                 const statusClass = status === '진행중' ? 'status-active' : 
                                   status === '예정' ? 'status-scheduled' : 'status-ended';
@@ -697,8 +711,8 @@
                     <tr>
                         <td>
                             ${popup.image ? 
-                                `<img src="${popup.image}" class="popup-thumbnail">` : 
-                                '<div class="popup-thumbnail" style="background:#f5f5f5;"></div>'
+                                `<img src="${popup.image}" class="popup-thumbnail" alt="팝업 이미지">` : 
+                                '<div class="popup-thumbnail"></div>'
                             }
                         </td>
                         <td>${popup.title || '제목 없음'}</td>
@@ -707,20 +721,16 @@
                         <td><span class="popup-status ${statusClass}">${status}</span></td>
                         <td>
                             <div class="action-buttons">
-                                <button class="btn-view" onclick="viewPopup(${index})">보기</button>
-                                <button class="btn-edit" onclick="editPopup(${index})">수정</button>
-                                <button class="btn-delete" onclick="deletePopup(${index})">삭제</button>
+                                <button class="btn-view" onclick="viewPopup(${popup.id})">보기</button>
+                                <button class="btn-edit" onclick="editPopup(${popup.id})">수정</button>
+                                <button class="btn-delete" onclick="deletePopup(${popup.id})">삭제</button>
                             </div>
                         </td>
                     </tr>
                 `;
             });
             
-            html += `
-                    </tbody>
-                </table>
-            `;
-            
+            html += `</tbody></table>`;
             container.innerHTML = html;
         }
         
@@ -734,115 +744,156 @@
             return '진행중';
         }
         
-        // 새 팝업 추가 모달 표시
-        function showAddModal() {
-            editingIndex = null;
-            document.getElementById('modalTitle').textContent = '새 팝업 추가';
+        // 모달 표시
+        function showModal(editId = null) {
+            currentEditId = editId;
             
-            // 체크박스 초기화
-            document.getElementById('use-title').checked = true;
-            document.getElementById('use-content').checked = true;
-            document.getElementById('use-image').checked = false;
-            
-            // 입력 필드 초기화
-            document.getElementById('popup-title').value = '';
-            document.getElementById('popup-content').value = '';
-            
-            // 그룹 상태 초기화
-            document.getElementById('title-group').classList.remove('disabled');
-            document.getElementById('content-group').classList.remove('disabled');
-            document.getElementById('image-group').classList.add('disabled');
-            document.getElementById('image-upload-area').classList.add('disabled');
-            
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('start-date').value = today;
-            
-            const nextWeek = new Date();
-            nextWeek.setDate(nextWeek.getDate() + 7);
-            document.getElementById('end-date').value = nextWeek.toISOString().split('T')[0];
-            
-            removeImage();
-            document.getElementById('popupModal').style.display = 'block';
-        }
-        
-        // 팝업 수정
-        function editPopup(index) {
-            editingIndex = index;
-            const popup = popups[index];
-            
-            document.getElementById('modalTitle').textContent = '팝업 수정';
-            
-            // 체크박스 설정
-            document.getElementById('use-title').checked = popup.use_title !== false;
-            document.getElementById('use-content').checked = popup.use_content !== false;
-            document.getElementById('use-image').checked = popup.use_image === true;
-            
-            // 값 설정
-            document.getElementById('popup-title').value = popup.title || '';
-            document.getElementById('popup-content').value = popup.content || '';
-            document.getElementById('start-date').value = popup.start_date || '';
-            document.getElementById('end-date').value = popup.end_date || '';
-            
-            // 그룹 상태 설정
-            toggleField('title');
-            toggleField('content');
-            toggleField('image');
-            
-            if (popup.image) {
-                document.getElementById('preview-img').src = popup.image;
-                document.getElementById('image-preview').style.display = 'block';
-                document.getElementById('upload-text').textContent = '이미지가 선택되었습니다';
+            if (editId) {
+                const popup = popups.find(p => p.id === editId);
+                if (popup) {
+                    document.getElementById('modalTitle').textContent = '팝업 수정';
+                    
+                    // 체크박스 설정
+                    document.getElementById('use-title').checked = popup.use_title !== false;
+                    document.getElementById('use-content').checked = popup.use_content !== false;
+                    document.getElementById('use-image').checked = popup.use_image === true;
+                    
+                    // 값 설정
+                    document.getElementById('title').value = popup.title || '';
+                    document.getElementById('content').value = popup.content || '';
+                    document.getElementById('startDate').value = popup.start_date || '';
+                    document.getElementById('endDate').value = popup.end_date || '';
+                    
+                    // 그룹 상태 설정
+                    toggleField('title');
+                    toggleField('content');
+                    toggleField('image');
+                    
+                    if (popup.image) {
+                        document.getElementById('previewImg').src = popup.image;
+                        document.getElementById('imagePreview').style.display = 'block';
+                        document.getElementById('uploadText').textContent = '이미지가 선택되었습니다';
+                    }
+                }
+            } else {
+                document.getElementById('modalTitle').textContent = '새 팝업 추가';
+                
+                // 체크박스 초기화
+                document.getElementById('use-title').checked = true;
+                document.getElementById('use-content').checked = true;
+                document.getElementById('use-image').checked = false;
+                
+                // 폼 리셋
+                document.getElementById('popupForm').reset();
+                document.getElementById('imagePreview').style.display = 'none';
+                document.getElementById('uploadText').textContent = '클릭하여 이미지를 선택하세요';
+                
+                // 그룹 상태 초기화
+                document.getElementById('title-group').classList.remove('disabled');
+                document.getElementById('content-group').classList.remove('disabled');
+                document.getElementById('image-group').classList.add('disabled');
+                document.getElementById('imageUpload').classList.add('disabled');
+                
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('startDate').value = today;
+                
+                const nextWeek = new Date();
+                nextWeek.setDate(nextWeek.getDate() + 7);
+                document.getElementById('endDate').value = nextWeek.toISOString().split('T')[0];
             }
             
             document.getElementById('popupModal').style.display = 'block';
         }
         
-        // 팝업 보기
-        function viewPopup(index) {
-            const popup = popups[index];
-            let message = '';
-            
-            if (popup.title) message += `제목: ${popup.title}\n`;
-            if (popup.content) message += `내용: ${popup.content}\n`;
-            message += `기간: ${popup.start_date || '시작일 없음'} ~ ${popup.end_date || '종료일 없음'}\n`;
-            if (popup.image) message += '이미지: 있음';
-            
-            alert(message);
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('popupModal').style.display = 'none';
+            currentEditId = null;
         }
         
-        // 팝업 삭제 (Supabase에서)
-        async function deletePopup(index) {
-            if (!confirm('이 팝업을 삭제하시겠습니까?')) {
+        // 폼 제출
+        document.getElementById('popupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const useTitle = document.getElementById('use-title').checked;
+            const useContent = document.getElementById('use-content').checked;
+            const useImage = document.getElementById('use-image').checked;
+            
+            const title = useTitle ? document.getElementById('title').value.trim() : '';
+            const content = useContent ? document.getElementById('content').value.trim() : '';
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const image = useImage ? document.getElementById('previewImg').src : '';
+            
+            // 최소 하나는 선택해야 함
+            if (!useTitle && !useContent && !useImage) {
+                alert('최소 하나의 항목은 선택해야 합니다.');
                 return;
             }
             
-            const popup = popups[index];
+            // 선택된 항목이 비어있는지 체크
+            if (useTitle && !title) {
+                alert('제목을 입력해주세요.');
+                return;
+            }
+            
+            if (useContent && !content) {
+                alert('내용을 입력해주세요.');
+                return;
+            }
+            
+            if (useImage && (!image || image === window.location.href)) {
+                alert('이미지를 선택해주세요.');
+                return;
+            }
             
             try {
-                const { error } = await supabase
-                    .from('popups')
-                    .delete()
-                    .eq('id', popup.id);
+                const popupData = {
+                    title: title || null,
+                    content: content || null,
+                    start_date: startDate || null,
+                    end_date: endDate || null,
+                    image: (image && image !== window.location.href) ? image : null,
+                    use_title: useTitle,
+                    use_content: useContent,
+                    use_image: useImage,
+                    saved_at: new Date().toISOString()
+                };
                 
-                if (error) {
-                    throw error;
+                let result;
+                
+                if (currentEditId) {
+                    const { data, error } = await supabaseClient
+                        .from('popups')
+                        .update(popupData)
+                        .eq('id', currentEditId)
+                        .select();
+                    
+                    if (error) throw error;
+                    result = data[0];
+                } else {
+                    const { data, error } = await supabaseClient
+                        .from('popups')
+                        .insert([popupData])
+                        .select();
+                    
+                    if (error) throw error;
+                    result = data[0];
                 }
                 
-                // 성공시 로컬 배열에서도 제거
-                popups.splice(index, 1);
-                renderPopupList();
+                closeModal();
+                await loadPopups();
                 
             } catch (error) {
-                console.error('팝업 삭제 오류:', error);
-                alert('팝업 삭제에 실패했습니다.');
+                console.error('저장 실패:', error);
+                alert('저장에 실패했습니다: ' + error.message);
             }
-        }
+        });
         
-        // 이미지 미리보기 및 압축
+        // 이미지 미리보기
         function previewImage(event) {
             const file = event.target.files[0];
             if (file) {
-                // 파일 크기 체크 (10MB 이하)
                 if (file.size > 10 * 1024 * 1024) {
                     alert('이미지 크기는 10MB 이하로 해주세요.');
                     event.target.value = '';
@@ -873,9 +924,9 @@
                         
                         const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
                         
-                        document.getElementById('preview-img').src = compressedDataUrl;
-                        document.getElementById('image-preview').style.display = 'block';
-                        document.getElementById('upload-text').textContent = '이미지가 선택되었습니다';
+                        document.getElementById('previewImg').src = compressedDataUrl;
+                        document.getElementById('imagePreview').style.display = 'block';
+                        document.getElementById('uploadText').textContent = '이미지가 선택되었습니다';
                     };
                     img.src = e.target.result;
                 };
@@ -885,95 +936,56 @@
         
         // 이미지 제거
         function removeImage() {
-            document.getElementById('popup-image').value = '';
-            document.getElementById('preview-img').src = '';
-            document.getElementById('image-preview').style.display = 'none';
-            document.getElementById('upload-text').textContent = '클릭하여 이미지를 선택하세요';
+            document.getElementById('imageFile').value = '';
+            document.getElementById('previewImg').src = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('uploadText').textContent = '클릭하여 이미지를 선택하세요';
         }
         
-        // 팝업 저장 (Supabase에)
-        async function savePopup() {
-            const useTitle = document.getElementById('use-title').checked;
-            const useContent = document.getElementById('use-content').checked;
-            const useImage = document.getElementById('use-image').checked;
-            
-            // 최소 하나는 선택해야 함
-            if (!useTitle && !useContent && !useImage) {
-                alert('최소 하나의 항목은 선택해야 합니다.');
+        // 팝업 보기
+        function viewPopup(id) {
+            const popup = popups.find(p => p.id === id);
+            if (popup) {
+                let message = '';
+                if (popup.title) message += `제목: ${popup.title}\n`;
+                if (popup.content) message += `내용: ${popup.content}\n`;
+                message += `기간: ${popup.start_date || '시작일 없음'} ~ ${popup.end_date || '종료일 없음'}\n`;
+                if (popup.image) message += '이미지: 있음';
+                alert(message);
+            }
+        }
+        
+        // 팝업 수정
+        function editPopup(id) {
+            showModal(id);
+        }
+        
+        // 팝업 삭제
+        async function deletePopup(id) {
+            if (!confirm('이 팝업을 삭제하시겠습니까?')) {
                 return;
             }
-            
-            const title = useTitle ? document.getElementById('popup-title').value : '';
-            const content = useContent ? document.getElementById('popup-content').value : '';
-            const startDate = document.getElementById('start-date').value;
-            const endDate = document.getElementById('end-date').value;
-            
-            // 선택된 항목이 비어있는지 체크
-            if (useTitle && !title) {
-                alert('제목을 입력해주세요.');
-                return;
-            }
-            
-            if (useContent && !content) {
-                alert('내용을 입력해주세요.');
-                return;
-            }
-            
-            if (useImage && !document.getElementById('preview-img').src) {
-                alert('이미지를 선택해주세요.');
-                return;
-            }
-            
-            const popupData = {
-                use_title: useTitle,
-                use_content: useContent,
-                use_image: useImage,
-                title: title,
-                content: content,
-                start_date: startDate || null,
-                end_date: endDate || null,
-                image: useImage ? document.getElementById('preview-img').src : null,
-                saved_at: new Date().toISOString()
-            };
             
             try {
-                let result;
+                const { error } = await supabaseClient
+                    .from('popups')
+                    .delete()
+                    .eq('id', id);
                 
-                if (editingIndex !== null) {
-                    // 수정
-                    const { data, error } = await supabase
-                        .from('popups')
-                        .update(popupData)
-                        .eq('id', popups[editingIndex].id)
-                        .select();
-                    
-                    if (error) throw error;
-                    result = data[0];
-                    popups[editingIndex] = result;
-                } else {
-                    // 새로 추가
-                    const { data, error } = await supabase
-                        .from('popups')
-                        .insert([popupData])
-                        .select();
-                    
-                    if (error) throw error;
-                    result = data[0];
-                    popups.unshift(result);
-                }
+                if (error) throw error;
                 
-                closeModal();
-                renderPopupList();
+                await loadPopups();
                 
             } catch (error) {
-                console.error('팝업 저장 오류:', error);
-                alert('팝업 저장에 실패했습니다.');
+                console.error('삭제 실패:', error);
+                alert('삭제에 실패했습니다: ' + error.message);
             }
         }
         
-        // 모달 닫기
-        function closeModal() {
-            document.getElementById('popupModal').style.display = 'none';
+        // 사이드바 토글
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
         }
     </script>
 </body>

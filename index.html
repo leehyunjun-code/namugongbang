@@ -529,15 +529,28 @@
     </div>
     
     <script>
-        // Supabase 설정
-        if (typeof window.SUPABASE_URL === 'undefined') {
-            window.SUPABASE_URL = 'https://qwikdismsngrfyukoihd.supabase.co';
-        }
-        if (typeof window.SUPABASE_ANON_KEY === 'undefined') {
-            window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aWtkaXNtc25ncmZ5dWtvaWhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE3MDE1NjcsImV4cCI6MjA2NzI3NzU2N30.arcdnlPp9W7-wg0HgWVRAqvSmlm34_Th-0ef5oLfU8o';
-        }
+        // 전역 변수
+        let supabaseClient = null;
         
-        const supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initSupabase();
+            scrollAnimation();
+            showPopups();
+        });
+        
+        // Supabase 초기화
+        function initSupabase() {
+            try {
+                const SUPABASE_URL = 'https://qwikdismsngrfyukoihd.supabase.co';
+                const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aWtkaXNtc25ncmZ5dWtvaWhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE3MDE1NjcsImV4cCI6MjA2NzI3NzU2N30.arcdnlPp9W7-wg0HgWVRAqvSmlm34_Th-0ef5oLfU8o';
+                
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('Supabase 초기화 완료');
+            } catch (error) {
+                console.error('Supabase 초기화 실패:', error);
+            }
+        }
         
         // 스크롤 애니메이션
         function scrollAnimation() {
@@ -554,12 +567,7 @@
             });
         }
         
-        // 페이지 로드시 실행
-        window.addEventListener('load', function() {
-            scrollAnimation();
-            showPopups();
-        });
-        
+        // 스크롤 이벤트 리스너
         window.addEventListener('scroll', scrollAnimation);
         
         // 팝업 표시 (Supabase에서 가져오기)
@@ -573,10 +581,15 @@
             }
             
             try {
+                if (!supabaseClient) {
+                    console.log('Supabase 클라이언트가 초기화되지 않음, localStorage 사용');
+                    return;
+                }
+                
                 const currentDate = new Date().toISOString().split('T')[0];
                 
                 // Supabase에서 활성 팝업 가져오기
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('popups')
                     .select('*')
                     .or(`start_date.is.null,start_date.lte.${currentDate}`)
