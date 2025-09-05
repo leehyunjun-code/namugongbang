@@ -428,6 +428,12 @@
                 padding: 4px 3px !important;
                 font-size: 9px !important;
             }
+			
+			/* 자료실 테이블은 더 크게 */
+ 	        .fade-up .resource-table td {
+ 	            font-size: 11px !important;
+ 	        }
+
             
             /* 테이블 wrapper */
             .table-wrapper {
@@ -436,18 +442,39 @@
             
             /* 자료실 테이블 */
             .resource-table {
-                min-width: 400px;
-                font-size: 11px;
+                min-width: 250px !important;
+                font-size: 10px !important;
+                width: 100% !important;
+                table-layout: fixed !important;
             }
+
             
             .resource-table th,
             .resource-table td {
-                padding: 6px 4px;
-                font-size: 11px;
+                padding: 8px 4px !important;
+                font-size: 10px !important;
+                word-break: break-word !important;
+                white-space: normal !important;
+                line-height: 1.4 !important;
             }
+
+			.resource-table .title-col a {
+			    white-space: normal !important;
+			    word-wrap: break-word !important;
+			    display: block !important;
+			}
             
             .resource-table .num-col {
-                width: 30px;
+                width: 20px !important;
+            }
+            
+            .resource-table .title-col {
+                word-wrap: break-word;
+            }
+            
+            .resource-table a {
+                display: block;
+                line-height: 1.3;
             }
             
             .file-type {
@@ -505,6 +532,11 @@
             .fade-up table td {
                 font-size: 8px !important;
                 padding: 3px 2px !important;
+            }
+            
+            /* 자료실 테이블은 더 크게 */
+            .fade-up .resource-table td {
+                font-size: 10px !important;
             }
             
             /* 자료실 테이블 더 작게 */
@@ -646,7 +678,7 @@
                         <h3 style="color: #6b5344; font-size: 20px; margin-bottom: 20px;">
                             법적 성격의 차이
                         </h3>
-                        <table style="width: 100%; min-width: 400px; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                        <table style="width: 100%; min-width: 250px; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
                             <thead>
                                 <tr style="background-color: #f8f9fa;">
                                     <th style="padding: 15px; border: 1px solid #dee2e6; text-align: center; width: 20%;">항목</th>
@@ -893,7 +925,7 @@
                                     <td class="num-col">14</td>
                                     <td class="title-col">
                                         <a href="https://drive.google.com/uc?export=download&id=1wLYP8338Py7EWoNhohVz90U48Eq2Vy3h">
-                                            출자자명부 예시(출자 1좌당 금액과 조합원 또는 회원별로 인수하려는 출자좌수를 적은 서류)
+                                            출자자명부 예시<br>(출자 1좌당 금액과 조합원 또는 회원별로 인수하려는 출자좌수를 적은 서류)
                                             <span class="file-type hwp">HWP</span>
                                         </a>
                                     </td>
