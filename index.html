@@ -188,6 +188,34 @@
             border-bottom: 2px solid #d4b5a0;
         }
         
+        /* 동영상 섹션 - 좌우 배치 */
+        .video-section {
+            margin-bottom: 35px;
+        }
+        
+        .video-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .video-item {
+            width: 320px;
+            max-width: 48%;
+            height: 240px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .video-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
         /* 이미지 영역 */
         .img-area {
             margin: 35px 0;
@@ -212,32 +240,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-        
-        /* 비디오 영역 */
-        .video-area {
-            margin: 35px 0;
-            text-align: center;
-        }
-        
-        .video-box {
-            width: 100%;
-            max-width: 650px;
-            height: 480px;
-            margin: 0 auto;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #000;
-            position: relative;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .video-box video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            display: block;
         }
         
         /* 엔딩 텍스트 */
@@ -508,8 +510,8 @@
                 padding: 35px;
             }
             
-            .video-box {
-                height: 400px;
+            .video-item {
+                height: 200px;
             }
         }
         
@@ -558,10 +560,17 @@
                 height: 250px;
             }
             
-            /* 모바일 비디오 박스 */
-            .video-box {
-                height: 280px;
-                margin-bottom: 20px;
+            /* 모바일에서 비디오 위아래 배치 */
+            .video-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .video-item {
+                width: 100%;
+                max-width: 100%;
+                height: 220px;
             }
             
             .ending-text {
@@ -638,8 +647,8 @@
                 padding: 25px 15px;
             }
             
-            .video-box {
-                height: 220px;
+            .video-item {
+                height: 180px;
             }
             
             .ending {
@@ -666,8 +675,8 @@
                 font-size: 22px;
             }
             
-            .video-box {
-                height: 200px;
+            .video-item {
+                height: 160px;
             }
             
             .ending-text {
@@ -706,6 +715,24 @@
             </div>
             
             <div class="content">
+                <!-- 동영상 섹션을 intro 위로 이동 -->
+                <div class="video-section fade-up">
+                    <div class="video-container">
+                        <div class="video-item">
+                            <video autoplay muted loop playsinline>
+                                <source src="together.mp4" type="video/mp4">
+                                브라우저가 비디오를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <div class="video-item">
+                            <video autoplay muted loop playsinline>
+                                <source src="background.mp4" type="video/mp4">
+                                브라우저가 비디오를 지원하지 않습니다.
+                            </video>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="intro">
                     나무와 사람, 그리고 이야기.
                 </div>
@@ -718,24 +745,6 @@
                     하지만 더 많은 사람들과 함께 배우고, 만들고, 나누고 싶었습니다.<br>
                     그래서 우리는 모였습니다. <strong class="highlight-text">"리우드(ReWood) 협동조합"</strong>.
                 </p>
-                
-                <div class="video-area fade-up">
-                    <div class="video-box">
-                        <video autoplay muted loop playsinline>
-                            <source src="together.mp4" type="video/mp4">
-                            브라우저가 비디오를 지원하지 않습니다.
-                        </video>
-                    </div>
-                </div>
-                
-                <div class="video-area fade-up">
-                    <div class="video-box">
-                        <video autoplay muted loop playsinline>
-                            <source src="background.mp4" type="video/mp4">
-                            브라우저가 비디오를 지원하지 않습니다.
-                        </video>
-                    </div>
-                </div>
                 
                 <p class="fade-up">
                     이곳은 단순히 나무를 깎고 가구를 만드는 곳이 아닙니다.<br>
