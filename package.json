@@ -1,7 +1,7 @@
 {
   "name": "namugongbang-popup-server",
   "version": "1.0.0",
-  "description": "공방 사람들 협동조합 팝업 관리 서버",
+  "description": "리우드(ReWood) 협동조합 팝업 관리 서버",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -14,6 +14,6 @@
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
-  "author": "공방 사람들 협동조합",
+  "author": "리우드(ReWood) 협동조합",
   "license": "MIT"
 }
