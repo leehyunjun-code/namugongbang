@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리우드(ReWood) 협동조합</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ecb6f0ad15a6499e8c0e12c06aa3d04a"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+            background-color: #faf8f5;
+            color: #3a3a3a;
+            word-break: keep-all;
+            word-wrap: break-word;
+        }
+        
+        /* 네비게이션바 스타일 */
+        .navbar {
+            width: 170px;
+            background-color: #2c2c2c;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-header {
+            padding: 30px 20px;
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #444;
+        }
+        
+        .navbar-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .navbar-subtitle {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .navbar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-section {
+            margin-bottom: 30px;
+        }
+        
+        .menu-label {
+            padding: 0 20px;
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .menu-item {
+            display: block;
+            padding: 12px 20px;
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .menu-item:hover {
+            background-color: #3a3a3a;
+            color: white;
+        }
+        
+        .menu-item.active {
+            background-color: #6b5344;
+            color: white;
+        }
+        
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: #fff;
+        }
+        
+        /* 햄버거 메뉴 버튼 (모바일용) */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background: #6b5344;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .mobile-menu-btn:hover {
+            background: #5a4337;
+        }
+        
+        /* 메인 컨텐츠 조정 */
+        .main-wrapper {
+            margin-left: 170px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+        
+        .wrap {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* 헤더 영역 */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-top: 30px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            color: #6b5344;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+        
+        .header span {
+            color: #9b8579;
+            font-size: 14px;
+        }
+        
+        /* 메인 컨텐츠 */
+        .content {
+            background: white;
+            padding: 45px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            line-height: 1.9;
+        }
+        
+        /* 지도 영역 스타일 */
+        .map-container {
+            width: 100%;
+            height: 500px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* 주소 정보 영역 */
+        .location-info {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #6b5344;
+        }
+        
+        .location-info h3 {
+            color: #6b5344;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .location-info p {
+            color: #555;
+            font-size: 15px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .location-info strong {
+            color: #3a3a3a;
+            font-weight: 600;
+        }
+        
+        /* 태블릿 반응형 (768px ~ 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .navbar {
+                width: 170px;
+            }
+            
+            .main-wrapper {
+                margin-left: 170px;
+            }
+            
+            .content {
+                padding: 35px;
+            }
+            
+            .map-container {
+                height: 400px;
+            }
+        }
+        
+        /* 모바일 반응형 (768px 이하) */
+        @media (max-width: 768px) {
+            /* 네비게이션바 숨김 */
+            .navbar {
+                transform: translateX(-100%);
+            }
+            
+            .navbar.open {
+                transform: translateX(0);
+            }
+            
+            /* 햄버거 메뉴 표시 */
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            /* 메인 컨텐츠 전체 너비 */
+            .main-wrapper {
+                margin-left: 0;
+            }
+            
+            .wrap {
+                padding: 60px 15px 20px 15px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .map-container {
+                height: 350px;
+            }
+            
+            .location-info {
+                padding: 20px;
+            }
+        }
+        
+        /* 작은 모바일 (480px 이하) */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 24px;
+            }
+            
+            .header span {
+                font-size: 13px;
+            }
+            
+            .content {
+                padding: 25px 15px;
+            }
+            
+            .map-container {
+                height: 300px;
+            }
+        }
+        
+        /* 아주 작은 모바일 (360px 이하) */
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 22px;
+            }
+            
+            .map-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 모바일 햄버거 메뉴 버튼 -->
+    <button class="mobile-menu-btn" onclick="toggleNavbar()">☰</button>
+    
+    <!-- 네비게이션바 -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-header">
+            <a href="index.html" class="navbar-title">리우드(ReWood)</a>
+            <div class="navbar-subtitle">협동조합</div>
+        </div>
+        
+        <div class="navbar-menu">
+            <div class="menu-section">
+                <div class="menu-label">메인</div>
+                <a href="index.html" class="menu-item">홈</a>
+                <a href="about.html" class="menu-item">협동조합</a>
+                <a href="location.html" class="menu-item active">오시는길</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 메인 컨텐츠 래퍼 -->
+    <div class="main-wrapper">
+        <div class="wrap">
+            <div class="header">
+                <h1>오시는길</h1>
+            </div>
+            
+            <div class="content">
+                <!-- 지도 영역 -->
+                <div class="map-container">
+                    <div id="map"></div>
+                </div>
+                
+                <!-- 위치 정보 -->
+                <div class="location-info">
+                    <h3>리우드(ReWood) 협동조합</h3>
+                    <p><strong>주소:</strong> 강원특별자치도 횡성군 횡성읍 덕고로 602</p>
+                    <p><strong>문의:</strong> 010-7192-6592</p>
+                    <p><strong>운영시간:</strong> 평일 09:00 - 18:00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initKakaoMap();
+        });
+        
+        // 카카오맵 초기화
+        function initKakaoMap() {
+            // 지도를 표시할 div
+            const mapContainer = document.getElementById('map');
+            
+            // 지도 옵션
+            const mapOption = {
+                center: new kakao.maps.LatLng(37.484809, 128.010323), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+            
+            // 지도 생성
+            const map = new kakao.maps.Map(mapContainer, mapOption);
+            
+            // 마커가 표시될 위치
+            const markerPosition = new kakao.maps.LatLng(37.484809, 128.010323);
+            
+            // 마커 생성
+            const marker = new kakao.maps.Marker({
+                position: markerPosition
+            });
+            
+            // 마커를 지도에 표시
+            marker.setMap(map);
+            
+            // 마커 클릭 이벤트
+            kakao.maps.event.addListener(marker, 'click', function() {
+                // 카카오맵 앱으로 길찾기 (모바일)
+                window.open(`https://map.kakao.com/link/to/리우드협동조합,37.484809,128.010323`);
+            });
+            
+            // 지도 컨트롤 추가
+            const mapTypeControl = new kakao.maps.MapTypeControl();
+            map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+            
+            const zoomControl = new kakao.maps.ZoomControl();
+            map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+        }
+        
+        // 네비게이션바 토글
+        function toggleNavbar() {
+            const navbar = document.getElementById('navbar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            navbar.classList.toggle('open');
+            
+            // 네비게이션바가 열려있으면 햄버거 메뉴 숨기기
+            if (navbar.classList.contains('open')) {
+                menuBtn.style.display = 'none';
+            } else {
+                menuBtn.style.display = 'block';
+            }
+        }
+        
+        // 메인 콘텐츠 클릭시 네비게이션바 닫기
+        document.querySelector('.main-wrapper').addEventListener('click', function() {
+            const navbar = document.getElementById('navbar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (navbar.classList.contains('open')) {
+                navbar.classList.remove('open');
+                menuBtn.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
