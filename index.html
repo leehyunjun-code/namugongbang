@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>리우드(ReWood) 협동조합</title>
-	<link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -163,6 +163,35 @@
             line-height: 1.9;
         }
         
+        /* 동영상 섹션 */
+        .video-section {
+            margin-bottom: 40px;
+        }
+        
+        .video-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .video-item {
+            width: 100%;
+            max-width: 650px;
+            height: 320px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .video-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
         .intro {
             font-size: 19px;
             color: #5a4a42;
@@ -186,60 +215,6 @@
             background-color: #fff9f0;
             padding: 2px 4px;
             border-bottom: 2px solid #d4b5a0;
-        }
-        
-        /* 동영상 섹션 - 좌우 배치 */
-        .video-section {
-            margin-bottom: 35px;
-        }
-        
-        .video-container {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
-        
-        .video-item {
-            width: 320px;
-            max-width: 48%;
-            height: 240px;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .video-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        
-        /* 이미지 영역 */
-        .img-area {
-            margin: 35px 0;
-            text-align: center;
-        }
-        
-        .img-box {
-            width: 100%;
-            max-width: 650px;
-            height: 380px;
-            background-color: #f5f5f5;
-            border: 1px solid #e0e0e0;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .img-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
         
         /* 엔딩 텍스트 */
@@ -431,54 +406,54 @@
             height: 16px;
             cursor: pointer;
         }
-		
-		.popup-container.image-only {
-		    border-radius: 0;
-		    overflow: visible;
-		    padding: 0;
-		    background: transparent;
-		}
-		
-		.popup-container.image-only .popup-body {
-		    padding: 0 !important;
-		}
-		
-		.popup-container.image-only .popup-image {
-		    display: block;
-		    width: auto;
-		    height: auto;
-		    max-width: 90vw;
-		    max-height: 80vh;
-		    margin: 0;
-		}
-		
-		.popup-container.image-only .popup-header.no-title {
-		    position: absolute;
-		    top: 0;
-		    right: 0;
-		    background: transparent;
-		    border: none;
-		    padding: 0;
-		    z-index: 1;
-		}
-		
-		.popup-container.image-only .popup-close {
-		    background: rgba(0, 0, 0, 0.5);
-		    color: white;
-		    margin: 10px;
-		}
-		
-		.popup-container.image-only .popup-footer {
-		    position: absolute;
-		    bottom: 0;
-		    left: 0;
-		    right: 0;
-		    background: rgba(249, 249, 249, 0.9);
-		}
-		
-		.popup-container.image-only .popup-body {
-		    padding: 0 0 60px 0 !important;
-		}
+        
+        .popup-container.image-only {
+            border-radius: 0;
+            overflow: visible;
+            padding: 0;
+            background: transparent;
+        }
+        
+        .popup-container.image-only .popup-body {
+            padding: 0 !important;
+        }
+        
+        .popup-container.image-only .popup-image {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 90vw;
+            max-height: 80vh;
+            margin: 0;
+        }
+        
+        .popup-container.image-only .popup-header.no-title {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: transparent;
+            border: none;
+            padding: 0;
+            z-index: 1;
+        }
+        
+        .popup-container.image-only .popup-close {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            margin: 10px;
+        }
+        
+        .popup-container.image-only .popup-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(249, 249, 249, 0.9);
+        }
+        
+        .popup-container.image-only .popup-body {
+            padding: 0 0 60px 0 !important;
+        }
         
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -511,7 +486,7 @@
             }
             
             .video-item {
-                height: 200px;
+                height: 280px;
             }
         }
         
@@ -556,21 +531,13 @@
                 font-size: 15px;
             }
             
-            .img-box {
-                height: 250px;
-            }
-            
-            /* 모바일에서 비디오 위아래 배치 */
+            /* 모바일 비디오 크기 */
             .video-container {
-                flex-direction: column;
-                align-items: center;
                 gap: 15px;
             }
             
             .video-item {
-                width: 100%;
-                max-width: 100%;
-                height: 220px;
+                height: 200px;
             }
             
             .ending-text {
@@ -701,7 +668,7 @@
                 <div class="menu-label">메인</div>
                 <a href="index.html" class="menu-item active">홈</a>
                 <a href="about.html" class="menu-item">협동조합</a>
-				<a href="location.html" class="menu-item">오시는길</a>
+                <a href="location.html" class="menu-item">오시는길</a>
             </div>
         </div>
     </nav>
@@ -715,7 +682,7 @@
             </div>
             
             <div class="content">
-                <!-- 동영상 섹션을 intro 위로 이동 -->
+                <!-- 동영상 섹션 -->
                 <div class="video-section fade-up">
                     <div class="video-container">
                         <div class="video-item">
@@ -851,7 +818,7 @@
             
             try {
                 if (!supabaseClient) {
-                    console.log('Supabase 클라이언트가 초기화되지 않음, localStorage 사용');
+                    console.log('Supabase 클라이언트가 초기화되지 않음');
                     return;
                 }
                 
